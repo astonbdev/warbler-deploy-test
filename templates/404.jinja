@@ -1,0 +1,27 @@
+{% extends 'base.jinja' %}
+
+{% block body_class %}error-404{%endblock %}
+
+{% block content %}
+
+  <div class="message-404">
+    <h4 class="display-4">Sorry, that page doesn't exist! {{ request.status }}</h4>
+    <p class="m-3">
+      You can search Warbler using the search box below or
+      <a href="/"><b>return to the homepage</b></a>.</p>
+    <div class="row">
+      <div class="col-sm-8 ms-auto me-auto">
+        <form action="/users">
+              <div class="input-group">
+                <input
+                    name="q"
+                    placeholder="Search Warbler"
+                    class="form-control mb-0 me-2 rounded">
+                  <button type="submit" class="input-group-text btn btn-default">Search</button>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

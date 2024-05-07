@@ -1,0 +1,79 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+
+<!--message display page, comment is for testing purposes-->
+
+<div class="bg"></div>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <ul class="list-group no-hover" id="messages">
+      <li class="list-group-item">
+
+        <a href="{{ url_for('show_user', user_id=message.user.id) }}">
+          <img src="{{ message.user.image_url }}"
+               alt=""
+               class="timeline-image">
+        </a>
+
+        <div class="message-area">
+          <div class="message-heading">
+            <a href="/users/{{ message.user.id }}">
+              @{{ message.user.username }}
+            </a>
+
+            {% if g.user %}
+            {% if g.user.id == message.user.id %}
+            <form method="POST"
+                  action="/messages/{{ message.id }}/delete">
+              {{ g.csrf_form.hidden_tag() }}
+              <button class="btn btn-outline-danger">Delete</button>
+            </form>
+            {% elif g.user.is_following(message.user) %}
+            <form method="POST"
+                  action="/users/stop-following/{{ message.user.id }}">
+              {{ g.csrf_form.hidden_tag() }}
+              <button class="btn btn-primary">Unfollow</button>
+            </form>
+            {% else %}
+            <form method="POST"
+                  action="/users/follow/{{ message.user.id }}">
+              {{ g.csrf_form.hidden_tag() }}
+              <button class="btn btn-outline-primary btn-sm">
+                Follow
+              </button>
+            </form>
+            {% endif %}
+            {% endif %}
+          </div>
+          <p class="single-message">{{ message.text }}</p>
+          <span class="text-muted">
+              {{ message.timestamp.strftime('%d %B %Y') }}
+            </span>
+        </div>
+
+        {% if message.user_id != g.user.id %}
+        <form method="POST"
+              action="/messages/{{ message.id }}/like"
+              class="messages-like-bottom">
+          <input type="hidden"
+                 name="came_from"
+                 value="{{request.url}}">
+              {{ g.csrf_form.hidden_tag() }}
+          <button class="
+                btn
+                btn-sm
+                {{'btn-primary'
+                    if message in g.user.liked_messages
+                    else 'btn-secondary'}}">
+            <i class="bi bi-hand-thumbs-up"></i>
+          </button>
+        </form>
+        {% endif %}
+
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
