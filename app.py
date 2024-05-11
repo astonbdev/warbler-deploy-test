@@ -15,6 +15,7 @@ from models import (
 
 load_dotenv()
 
+#for vscode help
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
