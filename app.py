@@ -65,6 +65,18 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
+@app.get('/add-tweet')
+def test_dbcentral():
+    user = db.get_or_404(User, 1)
+    message = Message(
+        text='test'
+    )
+
+    user.messages.append(message)
+    db.session.commit()
+
+    return render_template("home-anon.jinja")
+
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
